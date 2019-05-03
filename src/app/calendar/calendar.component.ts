@@ -11,7 +11,7 @@ import { CalendarService } from './calendar.service';
 })
 export class CalendarComponent implements OnInit {
 
-  view: string = 'week';
+  // view: string = 'week';
 
   news: any[];
 
