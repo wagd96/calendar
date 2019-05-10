@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 export class CalendarService {
 
   private apiUrl = "https://lis.udea.edu.co/db/user/calendar";
+  // private apiUrl = "http://localhost:8080/user/calendar"
   constructor(private http: HttpClient) { }
 
   public getSala1(): Observable<any[]> {

@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CalendarEvent, DAYS_OF_WEEK, CalendarView } from 'angular-calendar';
 import { CalendarService } from './calendar.service';
 
 
@@ -11,9 +11,11 @@ import { CalendarService } from './calendar.service';
 })
 export class CalendarComponent implements OnInit {
 
-  // view: string = 'week';
+  view: CalendarView = CalendarView.Month;
 
-  news: any[];
+  CalendarView = CalendarView;
+
+  locale: string = 'es';
 
   viewDate: Date = new Date();
   colors: any = {
@@ -34,27 +36,32 @@ export class CalendarComponent implements OnInit {
   excludeDays: number[] = [0];
   weekStartsOn = DAYS_OF_WEEK.SUNDAY;
 
-  events: CalendarEvent[] = [
-    {
-      start: new Date('2019-04-12T08:00:00-05:00'),
-      end: new Date('2019-04-12T12:00:00-05:00'),
-      title: 'Estructuras de la información',
-      color: this.colors.red
-    }
-  ];
+  events: CalendarEvent[] = [ ];
 
+  activeDayIsOpen: boolean = true;
   constructor(private service: CalendarService) { }
 
   ngOnInit() {
+   
+    console.log(this.events);
+
     this.service.getSala1().subscribe(res => {
-      this.news = res;
-      console.log(this.news);
+      this.events = res.map(({startTime: start, endTime: end, name: title}) => ({start: new Date(start), end: new Date(end), title}));
     });
   }
+
+  
 
   eventClicked({ event }: { event: CalendarEvent }): void {
     console.log('Event clicked', event);
     console.log(new Date());
   }
 
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
 }

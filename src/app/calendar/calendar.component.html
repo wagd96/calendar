@@ -1,29 +1,54 @@
-<div class="row text-center">
-  <div class="col-md-4">
-    <div class="btn-group">
-      <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-        [excludeDays]="excludeDays">
-        Previous
+<div class="container">
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()">
+          Anterior
+        </div>
+        <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+          Hoy
+        </div>
+        <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()">
+          Siguiente
+        </div>
       </div>
-      <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
-        Today
-      </div>
-      <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-        [excludeDays]="excludeDays">
-        Next
+    </div>
+
+    <div class="col-md-4">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'): locale }}</h3>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div class="btn btn-primary" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
+          Mes
+        </div>
+        <div class="btn btn-primary" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
+          Semana
+        </div>
+        <div class="btn btn-primary" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
+          Día
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <h3>
-      {{ viewDate | calendarDate:(view +
-      'ViewTitle'):'en':weekStartsOn:excludeDays }}
-    </h3>
+  <br />
+
+<ng-container *ngIf="!events.length==0">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" class="white-space" [locale]="locale" [excludeDays]="excludeDays" [viewDate]="viewDate"
+      [events]="events" (eventClicked)="eventClicked($event)">
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" class="white-space" [locale]="locale" [excludeDays]="excludeDays" [viewDate]="viewDate"
+      [events]="events" (eventClicked)="eventClicked($event)" [dayStartHour]="6" [dayEndHour]="21">
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" class="white-space" [locale]="locale" [viewDate]="viewDate" [events]="events"
+      (eventClicked)="eventClicked($event)" [dayStartHour]="6" [dayEndHour]="21">
+    </mwl-calendar-day-view>
   </div>
+</ng-container>
+
 </div>
-<br />
-
-
-<mwl-calendar-week-view [excludeDays]="excludeDays" [viewDate]="viewDate" [events]="events"
-  (eventClicked)="eventClicked($event)" [dayStartHour]="6" [dayEndHour]="21">
-</mwl-calendar-week-view>
